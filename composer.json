@@ -1,0 +1,20 @@
+{
+    "name": "test01/test",
+    "description": "This is my first composer package",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Test01\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "SunRain",
+            "email": "sunrain_github@163.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.0.0"
+    }
+}
