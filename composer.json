@@ -1,10 +1,14 @@
 {
-    "name": "test01/test",
-    "description": "This is my first composer package",
+    "name": "yj_out_api/out",
+    "description": "予集对外接口SDK",
+    "require": {
+        "php": ">=7.1.0",
+        "topthink/think-cache": ">=2.0"
+    },
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Test01\\": "src/"
+            "YjOutApi\\Out\\": "src/"
         }
     },
     "authors": [
@@ -13,8 +17,5 @@
             "email": "sunrain_github@163.com"
         }
     ],
-    "minimum-stability": "dev",
-    "require": {
-        "php": ">=7.0.0"
-    }
+    "minimum-stability": "dev"
 }
