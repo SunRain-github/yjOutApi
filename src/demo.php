@@ -10,16 +10,15 @@ use YjOutApi\Out\Outapi;
 class App
 {
     private $configData = null;
-	public function __construct()
+    public function __construct()
     {
         $this->configData = [
-		    'app_id' => 'wxcbe7d9c3bf31bdc4',
-		    'secret' => 'b9079512efb07d077464dec369f7231e'
-		];
+            'app_id' => 'wxcbe7d9c3bf31bdc4',
+            'secret' => 'b9079512efb07d077464dec369f7231e'
+        ];
     }
     public function appObject()
     {
-        // var_export($this->configData);die;
         return $app = Factory::miniProgram($this->configData);
     }
 
@@ -43,7 +42,7 @@ function resultData($msg='成功',$data=[],$code=200)
         'msg' => (string)$msg,
         'data' => $data
     ];
-    if(strtolower(trim(php_sapi_name()))){
+    if(strtolower(trim(php_sapi_name())) == 'cli'){
         var_export($rst);die;
     }
     return json_encode($rst);
@@ -105,7 +104,7 @@ function getYjUserUid($data)
         $response = $OutApiObj->httpRequest('user',$params);
         $data['YJ_uid'] = $response['uid'] ?? 0;
         if(!$data['YJ_uid']){
-			echo resultData('获取用户UID失败！',[],0);die;
+            echo resultData('获取用户UID失败！',[],0);die;
         }
         echo resultData('获取用户UID成功！',$data);die;
     } catch (\Exception $e) {
@@ -141,8 +140,8 @@ $data = json_decode($jsonData ,true);
 try {
     // $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
     // var_export($OutApiObj->getToken());exit;
-	$userInfo = getYjUserUid($data);
-    echo resultData('ok',$data);die;
+    $userInfo = getYjUserUid($data);
+    echo resultData('ok',$userInfo);die;
 } catch (\Exception $e) {
-	echo resultData($e->getMessage(),[],0);die;
+    echo resultData($e->getMessage(),[],0);die;
 }
