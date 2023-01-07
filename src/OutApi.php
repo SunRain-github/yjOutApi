@@ -107,15 +107,9 @@ class OutApi extends HttpService
         $params = $this->getConfig();
         $response = $this->postRequest($this->get('access_token'), $params);
         // var_dump($response);die;
-        try {
-            $response = json_decode($response, true);
-        } catch (\Exception $e) {
-            throw new \Exception('获取token失败|'.$e->getMessage());
+        if (!$response) {
+            throw new \Exception('获取token失败');
         }
-        // $response = json_decode($response, true);
-        // if (!$response) {
-        //     throw new \Exception('获取token失败');
-        // }
         if ($response['status'] === 200) {
             return $response['data'];
         } else {

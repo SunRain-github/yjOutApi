@@ -102,9 +102,7 @@ class HttpService
         self::$status = $status;
         self::$headerStr = trim(substr($content, 0, $status['header_size']));
         $content = trim(substr($content, $status['header_size']));
-        if(intval($status["http_code"]) === 200) return  $content;
-        throw new \Exception($content);
-        // return (intval($status["http_code"]) === 200) ? $content : $content;
+        return (intval($status["http_code"]) === 200) ? $content : false;
     }
 
     /**
