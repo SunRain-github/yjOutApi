@@ -39,8 +39,8 @@ class OutApi extends HttpService
     /**
      * @var string
      */
-    // protected $apiHost = 'https://dc.yjmt191314.com/outapi/';
-    protected $apiHost = 'http://www.yjv5.com/outapi/';
+    protected $apiHost = 'https://dc.yjmt191314.com/outapi/';
+    // protected $apiHost = 'http://www.yjv5.com/outapi/';
 
     /**
      * 登录接口
@@ -106,9 +106,8 @@ class OutApi extends HttpService
     {
         $params = $this->getConfig();
         $response = $this->postRequest($this->get('access_token'), $params);
-        $response = json_decode($response,true);
-        
         // var_dump($response);die;
+        $response = json_decode($response,true);
         if (!$response) {
             throw new \Exception('获取token失败');
         }
@@ -140,9 +139,21 @@ class OutApi extends HttpService
         $res = $this->request($this->get($url), $method, $data, $header);
         if (!$res) {
             throw new \Exception('平台错误：发生异常，请稍后重试');
-
         }
         $result = json_decode($res, true) ?: false;
+        // 判断登录失效重新发起登录
+        if(isset($result['status']) && $result['status'] == 110006 && $isHeader){
+            $this->getToken(true);
+            if (!$this->accessToken) {
+                throw new \Exception('配置已更改或token已失效');
+            }
+            $header = ['authori-zation:Bearer ' . $this->accessToken];
+            $res = $this->request($this->get($url), $method, $data, $header);
+            if (!$res) {
+                throw new \Exception('平台错误：发生异常，请稍后重试');
+            }
+            $result = json_decode($res, true) ?: false;
+        }
         if (!isset($result['status']) || $result['status'] != 200) {
             throw new \Exception(isset($result['msg']) ? '平台错误：' . $result['msg'] : '平台错误：发生异常，请稍后重试');
         }
