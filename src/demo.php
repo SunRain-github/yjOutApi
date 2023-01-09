@@ -106,12 +106,42 @@ function getYjUserUid($data)
         if(!$data['YJ_uid']){
             echo resultData('获取用户UID失败！',[],0);die;
         }
-        echo resultData('获取用户UID成功！',$data);die;
+        return $data;
     } catch (\Exception $e) {
         echo resultData($e->getMessage(),[],0);die;
     }
 }
-
+// 用户信息
+function getUserInfo($data)
+{
+    $params = [
+        'user_info_type' => $data['user_info_type'] ?? $data['login_type'] ?? '',
+    ];
+    $YJ_uid = $data['YJ_uid'] ?? 0;
+    try {
+        $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
+        return $OutApiObj->httpRequest('/user/info/'.$YJ_uid,$params);
+    } catch (\Exception $e) {
+        echo resultData($e->getMessage(),[],0);die;
+    }
+}
+// 积分明细
+function getUserSubsidy($data)
+{
+    $params = [
+        'user_info_type' => $data['user_info_type'] ?? $data['login_type'] ?? '',
+        'query_type' => $data['query_type'] ?? 'integral',
+        'page' => 1,
+        'limit' => 1
+    ];
+    $YJ_uid = $data['YJ_uid'] ?? 0;
+    try {
+        $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
+        return $OutApiObj->httpRequest('/user/subsidy_details/'.$YJ_uid,$params);
+    } catch (\Exception $e) {
+        echo resultData($e->getMessage(),[],0);die;
+    }
+}
 
 
 $jsonData = '{
@@ -128,7 +158,6 @@ $jsonData = '{
     },
     "is_demote": true,
     "session_key": "Gs9r6GK/98Nz6Hx96QaEaw==",
-
     "openid": "o_nta5RXHmpH1o8VTOdjRz2GD7DI",
     "login_type": "routine",
     "unionid": "ofB9I5r5j8lZzLS5v0zB0zy1sNPg"
@@ -136,11 +165,20 @@ $jsonData = '{
     // "login_type": "routine",
     // "unionid": "ofB9I5r5j8lZzLS5v0zB0zy1sNPg",
     // "openid": "o_nta5RXHmpH1o8VTOdjRz2GD7DI",
+    // "YJ_uid": 13205146
 $data = json_decode($jsonData ,true);
 try {
     // $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
     // var_export($OutApiObj->getToken());exit;
+
     $userInfo = getYjUserUid($data);
+    $userInfo += ['userInfo'=>getUserInfo($userInfo)];
+
+    $userInfo['query_type'] = 'integral';
+    $userInfo += ['UserSubsidy_integral'=>getUserSubsidy($userInfo)];
+
+    $userInfo['query_type'] = 'Withdrawal';
+    $userInfo += ['UserSubsidy_Withdrawal'=>getUserSubsidy($userInfo)];
     echo resultData('ok',$userInfo);die;
 } catch (\Exception $e) {
     echo resultData($e->getMessage(),[],0);die;

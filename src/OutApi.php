@@ -167,6 +167,9 @@ class OutApi extends HttpService
      */
     public function get(string $apiUrl = null)
     {
+
+        return $this->apiHost . trim($apiUrl,'/');
+
         if(!isset($this->OutapiUrl[$apiUrl])) throw new \Exception('接口地址有误！');
         return $this->apiHost . $this->OutapiUrl[$apiUrl];
     }
