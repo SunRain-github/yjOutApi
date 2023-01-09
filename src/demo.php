@@ -13,8 +13,8 @@ class App
     public function __construct()
     {
         $this->configData = [
-            'app_id' => 'wxcbe7d9c3bf31bdc4',
-            'secret' => 'b9079512efb07d077464dec369f7231e'
+            'app_id' => '',
+            'secret' => ''
         ];
     }
     public function appObject()
@@ -86,64 +86,11 @@ if(strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
     $userInfo['openid'] = $userInfoCong['openid'];
     $userInfo['session_key'] = $session_key;
     $userInfo['login_type'] = 'routine';
-    $data = getYjUserUid($userInfo);
+    $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
+    // 推送用户信息
+    $data['YJ_uid'] = $OutApiObj->getYjUserUid($data);
     echo resultData('ok',$data);die;
 }
-// 推送用户信息
-function getYjUserUid($data)
-{
-    $params = [
-        'user_type' => $data['login_type'] ?? '',
-        'unionid' => $data['unionid'] ?? '',
-        'openid' => $data['openid'] ?? '',
-        'ali_user_id' => $data['ali_user_id'] ?? '',
-        'phone' => $data['phone'] ?? '',
-    ];
-    try {
-        $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
-        $response = $OutApiObj->httpRequest('user',$params);
-        $data['YJ_uid'] = $response['uid'] ?? 0;
-        if(!$data['YJ_uid']){
-            echo resultData('获取用户UID失败！',[],0);die;
-        }
-        return $data;
-    } catch (\Exception $e) {
-        echo resultData($e->getMessage(),[],0);die;
-    }
-}
-// 用户信息
-function getUserInfo($data)
-{
-    $params = [
-        'user_info_type' => $data['user_info_type'] ?? $data['login_type'] ?? '',
-    ];
-    $YJ_uid = $data['YJ_uid'] ?? 0;
-    try {
-        $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
-        return $OutApiObj->httpRequest('/user/info/'.$YJ_uid,$params);
-    } catch (\Exception $e) {
-        echo resultData($e->getMessage(),[],0);die;
-    }
-}
-// 积分明细
-function getUserSubsidy($data)
-{
-    $params = [
-        'user_info_type' => $data['user_info_type'] ?? $data['login_type'] ?? '',
-        'query_type' => $data['query_type'] ?? 'integral',
-        'page' => 1,
-        'limit' => 1
-    ];
-    $YJ_uid = $data['YJ_uid'] ?? 0;
-    try {
-        $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
-        return $OutApiObj->httpRequest('/user/subsidy_details/'.$YJ_uid,$params);
-    } catch (\Exception $e) {
-        echo resultData($e->getMessage(),[],0);die;
-    }
-}
-
-
 $jsonData = '{
     "nickName": "微信用户",
     "gender": 0,
@@ -170,16 +117,27 @@ $data = json_decode($jsonData ,true);
 try {
     // $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
     // var_export($OutApiObj->getToken());exit;
+    $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
+    $YJ_uid = $OutApiObj->getYjUserUid($data);
+    echo '$YJ_uid = '.$YJ_uid.PHP_EOL.PHP_EOL;
+    $publicWhere = [
+        'user_info_type'=>$data['login_type'],
+        'uid'=>$YJ_uid,
+        'page' => 1,
+        'limit' => 1
+    ];
+    // 推送用户信息
+    $userInfo = $OutApiObj->getUserInfo($publicWhere);
+    echo '$userInfo = '. var_export($userInfo,true).PHP_EOL.PHP_EOL;
+    // 获取用户信息
+    $publicWhere['query_type'] = 'integral';
+    $UserSubsidy_integral = $OutApiObj->getUserSubsidy($publicWhere);
+    echo '$UserSubsidy_integral = '. var_export($UserSubsidy_integral,true).PHP_EOL.PHP_EOL;
+    // 获取用户积分明细
+    $publicWhere['query_type'] = 'Withdrawal';
+    $UserSubsidy_Withdrawal = $OutApiObj->getUserSubsidy($publicWhere);
+    echo '$UserSubsidy_Withdrawal = '. var_export($UserSubsidy_Withdrawal,true).PHP_EOL.PHP_EOL;
 
-    $userInfo = getYjUserUid($data);
-    $userInfo += ['userInfo'=>getUserInfo($userInfo)];
-
-    $userInfo['query_type'] = 'integral';
-    $userInfo += ['UserSubsidy_integral'=>getUserSubsidy($userInfo)];
-
-    $userInfo['query_type'] = 'Withdrawal';
-    $userInfo += ['UserSubsidy_Withdrawal'=>getUserSubsidy($userInfo)];
-    echo resultData('ok',$userInfo);die;
 } catch (\Exception $e) {
     echo resultData($e->getMessage(),[],0);die;
 }

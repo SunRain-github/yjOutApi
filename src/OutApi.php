@@ -39,8 +39,8 @@ class OutApi extends HttpService
     /**
      * @var string
      */
-    // protected $apiHost = 'https://dc.yjmt191314.com/outapi/';
-    protected $apiHost = 'http://www.yjv5.com/outapi/';
+    // protected $apiHost = 'https://dc.yjmt191314.com/outapi';
+    protected $apiHost = 'http://www.yjv5.com/outapi';
 
     /**
      * 登录接口
@@ -49,8 +49,6 @@ class OutApi extends HttpService
         'access_token' => 'access_token',
         'user' => 'user'
     ];
-
-
     /**
      * AccessTokenServeService constructor.
      * @param string $appid
@@ -167,10 +165,42 @@ class OutApi extends HttpService
      */
     public function get(string $apiUrl = null)
     {
-
-        return $this->apiHost . trim($apiUrl,'/');
-
-        if(!isset($this->OutapiUrl[$apiUrl])) throw new \Exception('接口地址有误！');
-        return $this->apiHost . $this->OutapiUrl[$apiUrl];
+        return $this->apiHost .'/'. trim($apiUrl,'/');
+    }
+    // 推送用户信息
+    public function getYjUserUid(array $data):int
+    {
+        $params = [
+            'user_type' => $data['login_type'] ?? '',
+            'unionid' => $data['unionid'] ?? '',
+            'openid' => $data['openid'] ?? '',
+            'ali_user_id' => $data['ali_user_id'] ?? '',
+            'phone' => $data['phone'] ?? '',
+        ];
+        $response = $this->httpRequest('user',$params);
+        $uid = $response['uid'] ?? 0;
+        if(!$uid) throw new \Exception('接口地址有误！');
+        return $uid;
+    }
+    // 获取用户信息
+    public function getUserInfo(array $data):array
+    {
+        $params = [
+            'user_info_type' => $data['user_info_type'] ?? $data['login_type'] ?? '',
+        ];
+        $uid = $data['uid'] ?? $data['YJ_uid'] ?? 0;
+        return $this->httpRequest('user/info/'.$uid,$params);
+    }
+    // 获取用户积分明细
+    public function getUserSubsidy($data):array
+    {
+        $params = [
+            'user_info_type' => $data['user_info_type'] ?? $data['login_type'] ?? '',
+            'query_type' => $data['query_type'] ?? 'integral',
+            'page' => $data['page'] ?? 1,
+            'limit' => $data['limit'] ?? 20
+        ];
+        $uid = $data['uid'] ?? $data['YJ_uid'] ?? 0;
+        return $this->httpRequest('/user/subsidy_details/'.$uid,$params);
     }
 }
