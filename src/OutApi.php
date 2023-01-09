@@ -39,8 +39,8 @@ class OutApi extends HttpService
     /**
      * @var string
      */
-    protected $apiHost = 'https://dc.yjmt191314.com/outapi/';
-    // protected $apiHost = 'http://www.yjv5.com/outapi/';
+    // protected $apiHost = 'https://dc.yjmt191314.com/outapi/';
+    protected $apiHost = 'http://www.yjv5.com/outapi/';
 
     /**
      * 登录接口
