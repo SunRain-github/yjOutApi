@@ -9,6 +9,7 @@ use YjOutApi\Out\Outapi;
 
 class App
 {
+    // ceshi
     private $configData = null;
     public function __construct()
     {
