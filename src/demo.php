@@ -23,6 +23,7 @@ class App
     }
 
 }
+// 12
 function getRequestData(){
     if(strtolower($_SERVER['REQUEST_METHOD']) == 'get')
         return $_GET;
