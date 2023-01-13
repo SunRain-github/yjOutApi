@@ -13,34 +13,10 @@ composer require yj_out_api/out
 // | Author: SunRain
 // +----------------------------------------------------------------------
 
-require '../vendor/autoload.php';
+require 'vendor/autoload.php';
 use EasyWeChat\Factory;
 use YjOutApi\Out\Outapi;
 
-function getRequestData(){
-    if(strtolower($_SERVER['REQUEST_METHOD']) == 'get')
-        return $_GET;
-    else if(strtolower($_SERVER['REQUEST_METHOD']) == 'post'){
-        if($_SERVER['HTTP_CONTENT_TYPE'] == 'application/json')
-        {
-            return json_decode(file_get_contents('php://input'),true);
-        }
-        return $_POST;
-    }
-    return [];
-}
-function resultData($msg='成功',$data=[],$code=200)
-{
-    $rst = [
-        'status' => $code,
-        'msg' => (string)$msg,
-        'data' => $data
-    ];
-    if(strtolower(trim(php_sapi_name())) == 'cli'){
-        var_export($rst);die;
-    }
-    return json_encode($rst);
-}
 ```
 ### 微信官方接口获取用户的 unionid 和 openid
 ```
@@ -104,11 +80,10 @@ try {
         "address" => "",
         "channel" => $pay_type
     ];
-    // var_dump($pay_params);die;
     $pay_jsconfig = $OutApiObj->wxpay($pay_params);
     echo '$pay_jsconfig = '. var_export($pay_jsconfig,true).PHP_EOL.PHP_EOL;
 
 } catch (\Exception $e) {
-    echo resultData($e->getMessage(),[],0);die;
+    var_export($e->getMessage());
 }
   ```
