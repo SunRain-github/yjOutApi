@@ -62,12 +62,13 @@ $jsonData = '{
     "login_type": "routine",
     "unionid": "ofB9I5r5j8lZzLS5v0zB0zy1sNPg"
 }';
-$data = json_decode($jsonData ,true);
-$APPID_demo = 'APPID_demo'; // 测试账号 appid
-$APPSECRET_demo = 'APPSECRET_demo'; // 测试密钥 appsecret
+
 ```
 ### 代码示例
 ```
+$data = json_decode($jsonData ,true);
+$APPID_demo = 'APPID_demo'; // 测试账号 appid
+$APPSECRET_demo = 'APPSECRET_demo'; // 测试密钥 appsecret
 try {
     $OutApiObj = new OutApi($APPID_demo,$APPSECRET_demo);
     // 推送用户信息并获取予集用户id
