@@ -5,6 +5,9 @@
 ```shell
 composer require yj_out_api/out
 ```
+
+## demo.php
+```
 <?php
 // +----------------------------------------------------------------------
 // | Author: SunRain
@@ -169,3 +172,4 @@ try {
 } catch (\Exception $e) {
     echo resultData($e->getMessage(),[],0);die;
 }
+```
