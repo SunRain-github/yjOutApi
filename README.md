@@ -7,16 +7,6 @@ composer require yj_out_api/out
 ```
 
 ## demo.php
-```
-<?php
-// +----------------------------------------------------------------------
-// | Author: SunRain
-// +----------------------------------------------------------------------
-
-require 'vendor/autoload.php';
-use EasyWeChat\Factory;
-use YjOutApi\Out\Outapi;
-```
 #### 微信官方接口获取用户的 unionid 和 openid
 ```
 $jsonData = '{
@@ -34,8 +24,17 @@ $jsonData = '{
 }';
 
 ```
-### 代码示例
+#### 代码示例
 ```
+<?php
+// +----------------------------------------------------------------------
+// | Author: SunRain
+// +----------------------------------------------------------------------
+
+require 'vendor/autoload.php';
+use EasyWeChat\Factory;
+use YjOutApi\Out\Outapi;
+
 $data = json_decode($jsonData ,true);
 $data['login_type'] = 'routine'; // 登录类型
 $APPID_demo = 'APPID_demo'; // 测试账号 appid
