@@ -35,6 +35,19 @@ require 'vendor/autoload.php';
 use EasyWeChat\Factory;
 use YjOutApi\Out\Outapi;
 
+$jsonData = '{
+    "nickName": "微信用户",
+    "gender": 0,
+    "language": "",
+    "city": "",
+    "province": "",
+    "country": "",
+    "avatarUrl": "https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132",
+    "is_demote": true,
+    "session_key": "Gs9r6GK/98Nz6Hx96QaEaw==",
+    "openid": "ofz_K4lbnbma5PQ_gJXb5IITZYtA",
+    "unionid": "ofB9I5r5j8lZzLS5v0zB0zy1sNPg"
+}';
 $data = json_decode($jsonData ,true);
 $data['login_type'] = 'routine'; // 登录类型
 $APPID_demo = 'APPID_demo'; // 测试账号 appid
