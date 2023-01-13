@@ -32,7 +32,6 @@ $jsonData = '{
 // +----------------------------------------------------------------------
 
 require 'vendor/autoload.php';
-use EasyWeChat\Factory;
 use YjOutApi\Out\Outapi;
 
 $jsonData = '{
