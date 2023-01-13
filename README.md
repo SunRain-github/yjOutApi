@@ -42,7 +42,7 @@ function resultData($msg='成功',$data=[],$code=200)
     return json_encode($rst);
 }
 ```
-# 微信官方接口获取用户的 unionid 和 openid
+## 微信官方接口获取用户的 unionid 和 openid
 ```
 $jsonData = '{
     "nickName": "微信用户",
@@ -65,11 +65,10 @@ $jsonData = '{
 $data = json_decode($jsonData ,true);
 $APPID_demo = 'APPID_demo'; // 测试账号 appid
 $APPSECRET_demo = 'APPSECRET_demo'; // 测试密钥 appsecret
+
 try {
     $OutApiObj = new OutApi($APPID_demo,$APPSECRET_demo);
-    ```
-    # 推送用户信息并获取予集用户id
-    ```
+    // 推送用户信息并获取予集用户id
     $YJ_uid = $OutApiObj->getYjUserUid($data);
     echo '$YJ_uid = '.$YJ_uid.PHP_EOL.PHP_EOL;
     // 公共条件
@@ -79,18 +78,18 @@ try {
         'page' => 1,
         'limit' => 1
     ];
-    # 获取用户信息（包含冻结和乐园积分）
+    // 获取用户信息（包含冻结和乐园积分）
     $userInfo = $OutApiObj->getUserInfo($publicWhere);
     echo '$userInfo = '. var_export($userInfo,true).PHP_EOL.PHP_EOL;
-    # 获取用户乐园积分明细
+    // 获取用户乐园积分明细
     $publicWhere['query_type'] = 'integral';
     $UserSubsidy_integral = $OutApiObj->getUserSubsidy($publicWhere);
     echo '$UserSubsidy_integral = '. var_export($UserSubsidy_integral,true).PHP_EOL.PHP_EOL;
-    # 获取用户冻结积分明细
+    // 获取用户冻结积分明细
     $publicWhere['query_type'] = 'Withdrawal';
     $UserSubsidy_Withdrawal = $OutApiObj->getUserSubsidy($publicWhere);
     echo '$UserSubsidy_Withdrawal = '. var_export($UserSubsidy_Withdrawal,true).PHP_EOL.PHP_EOL;
-    # 小程序支付
+    // 小程序支付
     $pay_type = 'routine';//支付渠道
     // 支付参数
     $pay_params = [
@@ -113,4 +112,4 @@ try {
 } catch (\Exception $e) {
     echo resultData($e->getMessage(),[],0);die;
 }
-```
+  ```
