@@ -41,7 +41,9 @@ function resultData($msg='成功',$data=[],$code=200)
     }
     return json_encode($rst);
 }
+```
 # 微信官方接口获取用户的 unionid 和 openid
+```
 $jsonData = '{
     "nickName": "微信用户",
     "gender": 0,
@@ -65,7 +67,9 @@ $APPID_demo = 'APPID_demo'; // 测试账号 appid
 $APPSECRET_demo = 'APPSECRET_demo'; // 测试密钥 appsecret
 try {
     $OutApiObj = new OutApi($APPID_demo,$APPSECRET_demo);
+    ```
     # 推送用户信息并获取予集用户id
+    ```
     $YJ_uid = $OutApiObj->getYjUserUid($data);
     echo '$YJ_uid = '.$YJ_uid.PHP_EOL.PHP_EOL;
     // 公共条件
