@@ -17,24 +17,6 @@ require '../vendor/autoload.php';
 use EasyWeChat\Factory;
 use YjOutApi\Out\Outapi;
 
-class App
-{
-    // ceshi
-    private $configData = null;
-    public function __construct()
-    {
-        $this->configData = [
-            'app_id' => '',
-            'secret' => ''
-        ];
-    }
-    public function appObject()
-    {
-        return $app = Factory::miniProgram($this->configData);
-    }
-
-}
-// 12
 function getRequestData(){
     if(strtolower($_SERVER['REQUEST_METHOD']) == 'get')
         return $_GET;
@@ -59,50 +41,7 @@ function resultData($msg='成功',$data=[],$code=200)
     }
     return json_encode($rst);
 }
-if(strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
-    $_POST = getRequestData();
-    $code = $_POST['code'] ?? '';
-    $encryptedData = $_POST['encryptedData'] ?? '';
-    $iv = $_POST['iv'] ?? '';
-    $rawData = $_POST['rawData'] ?? '';
-    $signature = $_POST['signature'] ?? '';
-    if (!$code)
-    {
-        echo resultData('授权失败,参数有误',[],0);die;
-    }
-    $session_key = '';
-    try {
-        $AppClass = new App();
-        $app = $AppClass->appObject();
-        $userInfoCong = $app->auth->session($code);
-        $session_key = $userInfoCong['session_key']??'';
-    } catch (\Exception $e) {
-        echo resultData('获取session_key失败，请检查您的配置！:' . $e->getMessage() . 'line' . $e->getLine(),[],0);die;
-    }
-    if(!$session_key){
-        echo resultData('获取session_key失败，请检查您的配置！',[],0);die;
-    }
-    if (!isset($userInfoCong['unionid']) || !isset($userInfoCong['openid'])) {
-        echo resultData('unionid或openid获取失败',[],0);die;
-    }
-    try {
-        //解密获取用户信息
-        $userInfo = $app->encryptor->decryptData($session_key, $iv, $encryptedData);
-    } catch (\Exception $e) {
-        if ($e->getCode() == '-41003') {
-            echo resultData('获取会话密匙失败',[],0);die;
-        }
-        echo resultData($e->getMessage(),[],0);die;
-    }
-    $userInfo['unionid'] = $userInfoCong['unionid'] ?? '';
-    $userInfo['openid'] = $userInfoCong['openid'];
-    $userInfo['session_key'] = $session_key;
-    $userInfo['login_type'] = 'routine';
-    $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
-    // 推送用户信息
-    $data['YJ_uid'] = $OutApiObj->getYjUserUid($data);
-    echo resultData('ok',$data);die;
-}
+# 微信官方接口获取用户的 unionid 和 openid
 $jsonData = '{
     "nickName": "微信用户",
     "gender": 0,
@@ -121,37 +60,35 @@ $jsonData = '{
     "login_type": "routine",
     "unionid": "ofB9I5r5j8lZzLS5v0zB0zy1sNPg"
 }';
-    // "login_type": "routine",
-    // "unionid": "ofB9I5r5j8lZzLS5v0zB0zy1sNPg",
-    // "openid": "o_nta5RXHmpH1o8VTOdjRz2GD7DI",
-    // "YJ_uid": 13205146
 $data = json_decode($jsonData ,true);
+$APPID_demo = 'APPID_demo'; // 测试账号 appid
+$APPSECRET_demo = 'APPSECRET_demo'; // 测试密钥 appsecret
 try {
-    // $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
-    // var_export($OutApiObj->getToken());exit;
-    $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
+    $OutApiObj = new OutApi($APPID_demo,$APPSECRET_demo);
+    # 推送用户信息并获取予集用户id
     $YJ_uid = $OutApiObj->getYjUserUid($data);
     echo '$YJ_uid = '.$YJ_uid.PHP_EOL.PHP_EOL;
+    // 公共条件
     $publicWhere = [
         'user_info_type'=>$data['login_type'],
         'uid'=>$YJ_uid,
         'page' => 1,
         'limit' => 1
     ];
-    // 推送用户信息
+    # 获取用户信息（包含冻结和乐园积分）
     $userInfo = $OutApiObj->getUserInfo($publicWhere);
     echo '$userInfo = '. var_export($userInfo,true).PHP_EOL.PHP_EOL;
-    // 获取用户信息
+    # 获取用户乐园积分明细
     $publicWhere['query_type'] = 'integral';
     $UserSubsidy_integral = $OutApiObj->getUserSubsidy($publicWhere);
     echo '$UserSubsidy_integral = '. var_export($UserSubsidy_integral,true).PHP_EOL.PHP_EOL;
-    // 获取用户积分明细
+    # 获取用户冻结积分明细
     $publicWhere['query_type'] = 'Withdrawal';
     $UserSubsidy_Withdrawal = $OutApiObj->getUserSubsidy($publicWhere);
     echo '$UserSubsidy_Withdrawal = '. var_export($UserSubsidy_Withdrawal,true).PHP_EOL.PHP_EOL;
-    // 小程序支付
-    $pay_type = 'routine';
-    
+    # 小程序支付
+    $pay_type = 'routine';//支付渠道
+    // 支付参数
     $pay_params = [
         "app_id" => "wx99bac8742748a075",
         "merchant_id" => "1636400641",
