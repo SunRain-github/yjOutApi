@@ -39,8 +39,8 @@ class OutApi extends HttpService
     /**
      * @var string
      */
-    // protected $apiHost = 'https://dc.yjmt191314.com/outapi';
-    protected $apiHost = 'http://www.yjv5.com/outapi';
+    protected $apiHost = 'https://dc.yjmt191314.com/outapi';
+    // protected $apiHost = 'http://www.yjv5.com/outapi';
 
     /**
      * 登录接口
@@ -202,5 +202,23 @@ class OutApi extends HttpService
         ];
         $uid = $data['uid'] ?? $data['YJ_uid'] ?? 0;
         return $this->httpRequest('/user/subsidy_details/'.$uid,$params);
+    }
+
+    public function wxpay($data)
+    {
+        $pay_params = [
+            "app_id" => $data['app_id'] ?? '',
+            "merchant_id" => $data['merchant_id'] ?? '',
+            "yj_uid" => $data['yj_uid'] ?? '',
+            "body" => $data['body'] ?? '',
+            "pay_amount" => $data['pay_amount'] ?? '',
+            "out_order_no" => $data['out_order_no'] ?? '',
+            "openid" => $data['openid'] ?? '',
+            "real_name" => $data['real_name'] ?? '',
+            "phone" => $data['phone'] ?? '',
+            "address" => $data['address'] ?? '',
+            "channel" => $data['channel'] ?? ''
+        ];
+        return $this->httpRequest('/pay/order',$pay_params);
     }
 }
