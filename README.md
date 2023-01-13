@@ -52,14 +52,9 @@ $jsonData = '{
     "province": "",
     "country": "",
     "avatarUrl": "https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132",
-    "watermark": {
-        "timestamp": 1672976305,
-        "appid": "wxcbe7d9c3bf31bdc4"
-    },
     "is_demote": true,
     "session_key": "Gs9r6GK/98Nz6Hx96QaEaw==",
     "openid": "ofz_K4lbnbma5PQ_gJXb5IITZYtA",
-    "login_type": "routine",
     "unionid": "ofB9I5r5j8lZzLS5v0zB0zy1sNPg"
 }';
 
@@ -67,6 +62,7 @@ $jsonData = '{
 ### 代码示例
 ```
 $data = json_decode($jsonData ,true);
+$data['login_type'] = 'routine'; // 登录类型
 $APPID_demo = 'APPID_demo'; // 测试账号 appid
 $APPSECRET_demo = 'APPSECRET_demo'; // 测试密钥 appsecret
 try {
@@ -96,8 +92,8 @@ try {
     $pay_type = 'routine';//支付渠道
     // 支付参数
     $pay_params = [
-        "app_id" => "wx99bac8742748a075",
-        "merchant_id" => "1636400641",
+        "app_id" => "wx99bac********075",
+        "merchant_id" => "163*****41",
         "yj_uid" => $userInfo["uid"],
         "body" => "测试",
         "pay_amount" => "1",
