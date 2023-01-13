@@ -16,9 +16,8 @@ composer require yj_out_api/out
 require 'vendor/autoload.php';
 use EasyWeChat\Factory;
 use YjOutApi\Out\Outapi;
-
 ```
-### 微信官方接口获取用户的 unionid 和 openid
+#### 微信官方接口获取用户的 unionid 和 openid
 ```
 $jsonData = '{
     "nickName": "微信用户",
