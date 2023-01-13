@@ -107,7 +107,7 @@ $jsonData = '{
     },
     "is_demote": true,
     "session_key": "Gs9r6GK/98Nz6Hx96QaEaw==",
-    "openid": "o_nta5RXHmpH1o8VTOdjRz2GD7DI",
+    "openid": "ofz_K4lbnbma5PQ_gJXb5IITZYtA",
     "login_type": "routine",
     "unionid": "ofB9I5r5j8lZzLS5v0zB0zy1sNPg"
 }';
@@ -139,6 +139,25 @@ try {
     $publicWhere['query_type'] = 'Withdrawal';
     $UserSubsidy_Withdrawal = $OutApiObj->getUserSubsidy($publicWhere);
     echo '$UserSubsidy_Withdrawal = '. var_export($UserSubsidy_Withdrawal,true).PHP_EOL.PHP_EOL;
+    // 小程序支付
+    $pay_type = 'routine';
+    
+    $pay_params = [
+        "app_id" => "wx99bac8742748a075",
+        "merchant_id" => "1636400641",
+        "yj_uid" => $userInfo["uid"],
+        "body" => "测试",
+        "pay_amount" => "1",
+        "out_order_no" => time(),
+        "openid" => $data["openid"],
+        "real_name" => "",
+        "phone" => "",
+        "address" => "",
+        "channel" => $pay_type
+    ];
+    // var_dump($pay_params);die;
+    $pay_jsconfig = $OutApiObj->wxpay($pay_params);
+    echo '$pay_jsconfig = '. var_export($pay_jsconfig,true).PHP_EOL.PHP_EOL;
 
 } catch (\Exception $e) {
     echo resultData($e->getMessage(),[],0);die;
