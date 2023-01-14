@@ -117,8 +117,8 @@ $jsonData = '{
     // "YJ_uid": 13205146
 $data = json_decode($jsonData ,true);
 try {
-    // $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
-    // var_export($OutApiObj->getToken());exit;
+    $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
+    var_export($OutApiObj->getToken());exit;
     $OutApiObj = new OutApi('APPID_demo','APPSECRET_demo');
     $YJ_uid = $OutApiObj->getYjUserUid($data);
     echo '$YJ_uid = '.$YJ_uid.PHP_EOL.PHP_EOL;
