@@ -2,7 +2,7 @@
     "name": "yj_out_api/out",
     "description": "予集对外接口SDK",
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=7.1.0"
     },
     "license": "MIT",
     "autoload": {
